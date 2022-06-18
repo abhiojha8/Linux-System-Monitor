@@ -7,6 +7,7 @@
 #include "process.h"
 #include "processor.h"
 #include "system.h"
+#include "linux_parser.h"
 
 using std::set;
 using std::size_t;
@@ -29,10 +30,16 @@ float System::MemoryUtilization() { return 0.0; }
 std::string System::OperatingSystem() { return string(); }
 
 // TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { return 0; }
+int System::RunningProcesses() { 
+    return 0; 
+    }
 
 // TODO: Return the total number of processes on the system
-int System::TotalProcesses() { return 0; }
+int System::TotalProcesses() { 
+    return 0; 
+    }
 
 // TODO: Return the number of seconds since the system started running
-long int System::UpTime() { return 0; }
+long int System::UpTime() const { 
+    return LinuxParser::UpTime(); 
+    }

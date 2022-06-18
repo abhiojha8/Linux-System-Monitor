@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <unistd.h>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -35,7 +36,7 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, version, kernel;
+  string os, kernel, version;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
@@ -67,10 +68,42 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  float mem_total{1};
+  float mem_free{0};
+  float buffers{0};
+  string token;
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  if (stream.is_open()) {
+    while (stream >> token) {
+      if (token == "MemTotal:") {
+        if (stream >> token) mem_total = stof(token);
+      } else if (token == "MemFree:") {
+        if (stream >> token) mem_free = stof(token);
+      } else if (token == "Buffers:") {
+        if (stream >> token) buffers = stof(token);
+      }
+    }
+  }
+  return 1 - mem_free / (mem_total - buffers);
+}
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long int LinuxParser::UpTime() { 
+  string token;
+  string line;
+
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream stream(line);
+    while (stream >> token) {
+      long token_int = stoi(token);
+      return token_int;
+    }
+  }
+  return 0;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
