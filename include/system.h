@@ -15,8 +15,8 @@ class System {
   long int UpTime() const;
   int TotalProcesses();               // TODO: See src/system.cpp
   int RunningProcesses();             // TODO: See src/system.cpp
-  std::string Kernel();               // TODO: See src/system.cpp
-  std::string OperatingSystem() const;      // TODO: See src/system.cpp
+  std::string Kernel() const;
+  std::string OperatingSystem() const;
 
   // TODO: Define any necessary private members
  private:
