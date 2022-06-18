@@ -11,7 +11,7 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// TODO: Return this process's ID
+// Return this process's ID
 Process::Process(int pid) {
     pid_ = pid;
 }
@@ -21,7 +21,18 @@ int Process::Pid() const {
     }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return 0; }
+float Process::CpuUtilization() const {
+    return cpu_;
+}
+
+void Process::CpuUtilization(long system_ticks, long active_ticks) {
+    long uptime, active_time;
+    uptime = system_ticks - cached_system_ticks_;
+    active_time = active_ticks - cached_active_ticks_;
+    cpu_ = static_cast<float>(active_time) / uptime;
+    cached_system_ticks_ = system_ticks;
+    cached_active_ticks_ = active_ticks;
+}
 
 // TODO: Return the command that generated this process
 string Process::Command() { return string(); }

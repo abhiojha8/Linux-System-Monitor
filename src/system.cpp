@@ -14,18 +14,42 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
+// Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+// Return a container composed of the system's processes
+vector<Process>& System::Processes() { 
+    vector<int> pids = LinuxParser::Pids();
+
+    // init an empty set of pids
+    set<int> curr_pids;
+    for (Process const& process : processes_) {
+    curr_pids.insert(process.Pid());
+    }
+
+    // emplace new processes
+    for (auto pid: pids) {
+        if (curr_pids.find(pid) == curr_pids.end()) {
+            processes_.emplace_back(pid);
+        }
+    }
+
+    // update cpu_utilization
+    for (auto& process : processes_) {
+        process.CpuUtilization(LinuxParser::ActiveJiffies(process.Pid()),
+                               LinuxParser::Jiffies());
+    }
+
+    std::sort(processes_.rbegin(),processes_.rend());
+    return processes_;
+    }   
 
 // Return the system's kernel identifier (string)
 std::string System::Kernel() const { 
     return LinuxParser::Kernel(); 
     }
 
-// TODO: Return the system's memory utilization
+// Return the system's memory utilization
 float System::MemoryUtilization() const { 
     return LinuxParser::MemoryUtilization();
  }
@@ -35,7 +59,7 @@ std::string System::OperatingSystem() const {
     return LinuxParser::OperatingSystem(); 
     }
 
-// TODO: Return the number of processes actively running on the system
+// Return the number of processes actively running on the system
 int System::RunningProcesses() const{ 
     return LinuxParser::RunningProcesses(); 
     }
