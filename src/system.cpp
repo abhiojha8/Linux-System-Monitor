@@ -26,7 +26,9 @@ std::string System::Kernel() const {
     }
 
 // TODO: Return the system's memory utilization
-float System::MemoryUtilization() { return 0.0; }
+float System::MemoryUtilization() const { 
+    return LinuxParser::MemoryUtilization();
+ }
 
 // Return the operating system name
 std::string System::OperatingSystem() const { 

@@ -13,7 +13,7 @@ using std::to_string;
 using std::vector;
 using std::ifstream;
 
-// DONE: An example of how to read data from the filesystem
+// An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -36,7 +36,7 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// DONE: An example of how to read data from the filesystem
+// An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
   string os, kernel, version;
   string line;
@@ -49,7 +49,6 @@ string LinuxParser::Kernel() {
   return kernel;
 }
 
-// BONUS: Update this to use std::filesystem
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
   DIR* directory = opendir(kProcDirectory.c_str());
@@ -69,28 +68,29 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
-  float mem_total{1};
-  float mem_free{0};
-  float buffers{0};
+  float m_free{0}, m_total{1};
   string token;
   ifstream stream(kProcDirectory + kMeminfoFilename);
   if (stream.is_open()) {
     while (stream >> token) {
       if (token == "MemTotal:") {
-        if (stream >> token) mem_total = stof(token);
-      } else if (token == "MemFree:") {
-        if (stream >> token) mem_free = stof(token);
-      } else if (token == "Buffers:") {
-        if (stream >> token) buffers = stof(token);
+        if (stream >> token) {
+          m_total = stof(token);
+        }
+      } 
+      else if (token == "MemFree:") {
+        if (stream >> token) {
+          m_free = stof(token);
+        }
       }
     }
   }
-  return 1 - mem_free / (mem_total - buffers);
+  return 1 - m_free / m_total;
 }
 
-// TODO: Read and return the system uptime
+// Read and return the system uptime
 long int LinuxParser::UpTime() { 
   string token;
   string line;
