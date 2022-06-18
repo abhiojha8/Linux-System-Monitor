@@ -1,4 +1,4 @@
-# CppND-System-Monitor
+# Linux-System-Monitor
 
 ![System Monitor](images/monitor.png)
 
