@@ -34,13 +34,13 @@ std::string System::OperatingSystem() const {
     }
 
 // TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { 
+int System::RunningProcesses() const{ 
     return 0; 
     }
 
 // TODO: Return the total number of processes on the system
-int System::TotalProcesses() { 
-    return 0; 
+int System::TotalProcesses() const { 
+    return LinuxParser::TotalProcesses(); 
     }
 
 // TODO: Return the number of seconds since the system started running
